@@ -31,7 +31,6 @@ def main():
                     articleitem.download()
                     articleitem.parse()
                 except ArticleException:
-                    print("404 Error")
                     pass
                 with connection.cursor() as cursor:
         # Read a single record
@@ -44,7 +43,7 @@ def main():
                         uid = 1
                 with connection.cursor() as cursor:
                     # print("irdata/" + str(uid) + ".txt")
-                    file = open("irdata/" + str(uid) + ".txt","w", encoding="utf-8")
+                    file = open("irdata/" + str(uid) + ".txt", "w", encoding="utf-8")
                     file.write(articleitem.text.encode('utf-8', 'ignore').decode('utf-8'))
                     file.close()
                     sql = "INSERT INTO `ir_articles` (`url`, `text`, `title`) VALUES (%s, %s, %s)"
@@ -61,6 +60,6 @@ def main():
         # downloaded.nlp()
         # print(downloaded.summary)
     finally:
-            connection.close()
+        connection.close()
 if __name__ == "__main__":
     main()
