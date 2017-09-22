@@ -21,6 +21,11 @@ def main():
         for webitem in SITEARRAY:
             newsitem = newspaper.build("http://" + webitem, memoize_articles = False)
             for articleitem in newsitem.articles:
+                try:
+                    os.makedirs("irdata")
+                except OSError as e:
+                    if e.errno != errno.EEXIST:
+                        raise
                 print(articleitem.url)
                 try:
                     articleitem.download()
