@@ -1,3 +1,7 @@
 {
-    "depth":10
+    "depth":10,
+    "db-username":"root",
+    "db-password":"",
+    "db-name":"ir",
+    "db-host":"localhost"
 }
