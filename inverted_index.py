@@ -34,9 +34,7 @@ for word in sorted_dictionary:
         vocabulary[key].sort(key=itemgetter(0))
 
 
-# information of doc_freq included in vocabulary
-#for key in vocabulary:
-#    update = (key,len(vocabulary[key]))
+
 
 
 
