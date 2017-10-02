@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 22, 2017 at 05:36 PM
+-- Generation Time: Oct 02, 2017 at 08:33 PM
 -- Server version: 10.1.25-MariaDB
 -- PHP Version: 7.1.7
 
@@ -34,7 +34,8 @@ CREATE TABLE `ir_articles` (
   `uid` int(11) NOT NULL,
   `url` text NOT NULL,
   `text` text NOT NULL,
-  `title` text NOT NULL
+  `title` text NOT NULL,
+  `indexed` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -55,7 +56,7 @@ ALTER TABLE `ir_articles`
 -- AUTO_INCREMENT for table `ir_articles`
 --
 ALTER TABLE `ir_articles`
-  MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT;COMMIT;
+  MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=239;COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

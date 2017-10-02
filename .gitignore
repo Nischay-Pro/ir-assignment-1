@@ -1,1 +1,6 @@
 irdata/
+
+.idea/
+.vscode/
+__pycache__/
+invertedindex.json

@@ -1,7 +1,8 @@
 {
-    "depth":10,
+    "memoize":false,
     "db-username":"root",
     "db-password":"",
     "db-name":"ir",
-    "db-host":"localhost"
+    "db-host":"localhost",
+    "sources":[]
 }
