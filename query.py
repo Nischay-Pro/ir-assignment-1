@@ -2,6 +2,7 @@ import nltk
 import individual_file
 import json
 import sys
+import pymysql.cursors
 from operator import itemgetter
 
 def main(query):
@@ -53,8 +54,27 @@ def main(query):
 
 
     # Result to the Query
+    with open('config.json', 'r') as f:
+        ARR = json.load(f)
+    HOST = (ARR)['db-host']
+    USER = (ARR)['db-username']
+    PASSWORD = (ARR)['db-password']
+    DBNAME = (ARR)['db-name']
+    MEMOIZE = (ARR)['memoize']
+
+    connection = pymysql.connect(host=HOST, user=USER, password=PASSWORD, db=DBNAME, charset='utf8mb4',cursorclass=pymysql.cursors.DictCursor)
+    print("Found " + str(len(final_list)) + " results. Displaying top " + str(min(10, len(final_list) - 1)))
     for index in range(1,min(11,len(final_list))):
-        print(index, ":", final_list[index][0])
+        print("Article " + str(index) + ":")
+        with connection.cursor() as cursor:
+            sql = "SELECT title From ir_articles WHERE uid=" + str(final_list[index][0]) + ""
+            cursor.execute(sql, )
+            result = cursor.fetchone()
+            r = json.dumps(result)
+            ARR = json.loads(r)
+            title = (ARR)['title']
+        print("Article Title: " + str(title))
+        print("File Path: " + "irdata\\" + str(final_list[index][0]) + ".txt")
 
 if __name__ == "__main__":
     try:
