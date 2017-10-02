@@ -9,6 +9,7 @@ from newspaper import ArticleException
 nltk.download('punkt')
 
 def main():
+    # loading configuation
     with open('config.json', 'r') as f:
         ARR = json.load(f)
     HOST = (ARR)['db-host']
@@ -17,19 +18,23 @@ def main():
     DBNAME = (ARR)['db-name']
     MEMOIZE = (ARR)['memoize']
     SOURCES = (ARR)['sources']
-
+    # establishing connection with server
     connection = pymysql.connect(host=HOST, user=USER, password=PASSWORD, db=DBNAME, charset='utf8mb4', cursorclass=pymysql.cursors.DictCursor)
     print("Database Connection Established")
     if len(SOURCES) != 0:
+        # Warn user for custom sources added
         print("Warning! " + str(len(SOURCES)) + " custom source(s) has been added. Parsing may fail.")
     try:
+        # Generating Site Array to parse articles from
         SITEARRAY = ["https://www.wired.com","https://www.theverge.com","https://www.extremetech.com"]
         for urlitem in SOURCES:
             SITEARRAY.append(urlitem)
         for webitem in SITEARRAY:
             print("Parsing from: " + webitem)
+            # Starting up newspaper
             newsitem = newspaper.build(webitem, memoize_articles = MEMOIZE)
             count = 0
+            # Displaying Articles found
             print("Found " + str(len(newsitem.articles)) + " new articles!")
             for articleitem in newsitem.articles:
                 with connection.cursor() as cursor:
@@ -49,7 +54,7 @@ def main():
                         except ArticleException:
                             pass
                         with connection.cursor() as cursor:
-        # Read a single record
+                        # Read uid from the last article added
                             sql = "SELECT LAST_INSERT_ID(uid) From ir_articles ORDER BY uid DESC LIMIT 1"
                             cursor.execute(sql, )
                             result = cursor.fetchone()
@@ -59,13 +64,16 @@ def main():
                                 uid = 1
                         with connection.cursor() as cursor:
                             # print("irdata/" + str(uid) + ".txt")
+                            # Save parsed article
                             file = open("irdata/" + str(uid) + ".txt", "w", encoding="utf-8")
                             file.write(articleitem.text.encode('utf-8', 'ignore').decode('utf-8'))
                             file.close()
+                            # Insert parsed article
                             sql = "INSERT INTO `ir_articles` (`url`, `text`, `title`) VALUES (%s, %s, %s)"
                             # print(articleitem.url, articleitem.text, articleitem.title)
                             title = articleitem.title
                             if title == None:
+                                # If title is not present or cannot be extracted set title to No Title
                                 title = "No Title"
                             cursor.execute(sql, (articleitem.url, "irdata/" + str(uid) + ".txt", title))
                         connection.commit()
@@ -83,6 +91,7 @@ def main():
         # print(downloaded.summary)
     finally:
         connection.close()
+# Generates Progress Bar for Console Application
 def progress(count, total, suffix=''):
     bar_len = 60
     filled_len = int(round(bar_len * count / float(total)))
