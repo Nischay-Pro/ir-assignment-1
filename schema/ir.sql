@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.0
+-- version 4.7.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 02, 2017 at 08:33 PM
--- Server version: 10.1.25-MariaDB
--- PHP Version: 7.1.7
+-- Generation Time: Nov 13, 2017 at 12:30 AM
+-- Server version: 10.1.28-MariaDB
+-- PHP Version: 7.1.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -35,7 +35,10 @@ CREATE TABLE `ir_articles` (
   `url` text NOT NULL,
   `text` text NOT NULL,
   `title` text NOT NULL,
-  `indexed` tinyint(1) NOT NULL DEFAULT '0'
+  `indexed` tinyint(1) NOT NULL DEFAULT '0',
+  `backlinks` text,
+  `inlinks` text,
+  `pagerank` text
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -56,7 +59,8 @@ ALTER TABLE `ir_articles`
 -- AUTO_INCREMENT for table `ir_articles`
 --
 ALTER TABLE `ir_articles`
-  MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=239;COMMIT;
+  MODIFY `uid` int(11) NOT NULL AUTO_INCREMENT;
+COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
