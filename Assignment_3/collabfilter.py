@@ -1,6 +1,7 @@
 import dataset
 import numpy as np
 import error
+import timeit
 
 data = dataset.data
 movies = dataset.movies
@@ -62,9 +63,12 @@ def evaluate(arr, sim, item, user):
     return num/den
 
 # Function call to test the functionality of collaborative filtering
+start = timeit.default_timer()
 original = dataset.data
 calculate = np.zeros((movies, users))
 for x in range(0, movies):
     for y in range(0, users):
         if original[x][y] > 0:
             calculate[x][y] = predict(dataset.data, x, y)
+stop = timeit.default_timer()
+print(stop-start)

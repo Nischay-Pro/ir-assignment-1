@@ -1,13 +1,9 @@
 import svd
 import numpy as np
+import dataset
+import error
+import timeit
 
-A = [[1, 1, 1, 0, 0],
-     [3, 3, 3, 0, 0],
-     [4, 4, 4, 0, 0],
-     [5, 5, 5, 0, 0],
-     [0, 2, 0, 4, 4],
-     [0, 0, 0, 5, 5],
-     [0, 1, 0, 2, 2]]
 
 def svd_90(A):
     [U, sigma, V_tran] = svd.svd(A)
@@ -37,3 +33,7 @@ def svd_90(A):
     A_svd_90 = np.matmul(A_svd_90, V_tran)
 
     return A_svd_90
+start = timeit.default_timer()
+print(error.rmse(dataset.data, svd_90(dataset.data)))
+stop = timeit.default_timer()
+print(stop-start)

@@ -1,13 +1,9 @@
 import svd
 import numpy as np
+import error
+import timeit
+import dataset
 
-A = [[1, 1, 1, 0, 0],
-     [3, 3, 3, 0, 2],
-     [4, 4, 4, 1, 0],
-     [5, 5, 5, 0, 0],
-     [0, 2, 0, 4, 4],
-     [0, 0, 0, 5, 5],
-     [0, 1, 0, 2, 2]]
 
 
 def cur_random(A):
@@ -96,3 +92,7 @@ def cur_random(A):
     A_cur_ran = np.matmul(A_cur_ran, R)
 
     return A_cur_ran
+
+start = timeit.default_timer()
+print(error.rmse(dataset.data, cur_random(dataset.data)))
+stop = timeit.default_timer()

@@ -1,13 +1,9 @@
 import svd
 import numpy as np
+import timeit
+import error
+import dataset
 
-A = [[1, 1, 1, 0, 0],
-     [3, 3, 3, 0, 0],
-     [4, 4, 4, 0, 0],
-     [5, 5, 5, 0, 0],
-     [0, 0, 0, 4, 4],
-     [0, 0, 0, 5, 5],
-     [0, 0, 0, 2, 2]]
 
 
 def cur(A):
@@ -100,3 +96,8 @@ def cur(A):
     A_cur = np.matmul(A_cur, R)
 
     return A_cur
+
+start = timeit.default_timer()
+print(error.rmse(dataset.data, cur(dataset.data)))
+stop = timeit.default_timer()
+print(stop-start)

@@ -1,17 +1,8 @@
 import numpy as np
 from numpy import linalg as LA
-
-A = [[1, 1, 1, 0, 0],
-     [3, 3, 3, 0, 0],
-     [4, 4, 4, 0, 0],
-     [5, 5, 5, 0, 0],
-     [0, 2, 0, 4, 4],
-     [0, 0, 0, 5, 5],
-     [0, 1, 0, 2, 2]]
-
-'''A = [[3, 2, 2],
-     [2, 3, -2]]'''
-
+import dataset
+import timeit
+import error
 
 def svd(A):
     A = np.array(A)
@@ -20,7 +11,7 @@ def svd(A):
 
     # Calculate the eigen-values and eigen-vectors of A_tran_A
     A_tran_A = np.matmul(A_tran, A)
-    eig_val_V, eig_vect_V = LA.eig(np.array(A_tran_A))
+    eig_val_V, eig_vect_V = LA.eigh(np.array(A_tran_A))
     for x in range(0, len(eig_val_V)-1):
         if eig_val_V[x] > eig_val_V[x+1]:
             continue
@@ -54,4 +45,12 @@ def svd(A):
     U = A_V
 
     return U, sigma, V_tran
+
+
+start = timeit.default_timer()
+U, sigma, V_tran = svd(dataset.data)
+calculate = np.matmul(U, sigma)
+calculate = np.matmul(calculate, V_tran)
+
+stop = timeit.default_timer()
 

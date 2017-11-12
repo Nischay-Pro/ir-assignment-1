@@ -110,4 +110,4 @@ for x in range(0, 100):
         if original[x][y] > 0:
             calculate[x][y] = predict_base(dataset.data, x, y)
 
-print(error.rmse(original, calculate))
+
