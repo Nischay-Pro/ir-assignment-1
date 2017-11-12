@@ -1,7 +1,8 @@
 import dataset
-import math as m
+import numpy as np
+import error
 
-data = dataset.matrix
+data = dataset.data
 movies = dataset.movies
 users = dataset.users
 mean = [0]*movies
@@ -12,7 +13,7 @@ data = data.astype(float)
 def predict(matrix, item, user):
     normalized = normalize(matrix)
     sim = similar(normalized, item)
-    res = evaluate(dataset.matrix, sim, item, user)
+    res = evaluate(dataset.data, sim, item, user)
     return res
 
 
@@ -25,7 +26,10 @@ def normalize(arr):
             if arr[x][y] > 0:
                 count = count + 1
                 var = var + arr[x][y]
-        mean[x] = var/count
+        if count == 0:
+            mean[x] = 0
+        else:
+            mean[x] = var/count
     for x in range(0, movies):
         for y in range(0, users):
             if arr[x][y] > 0:
@@ -43,7 +47,7 @@ def similar(arr, item):
             sim[x] += arr[x][y]*arr[item][y]
             deni += arr[item][y]**2
             denc += arr[x][y]**2
-        sim[x] = sim[x]/m.sqrt(deni*denc)
+        sim[x] = sim[x]/((deni*denc)**0.5)
     return sim
 
 
@@ -58,8 +62,9 @@ def evaluate(arr, sim, item, user):
     return num/den
 
 # Function call to test the functionality of collaborative filtering
-result = predict(data, 0, 4)
-print(result)
-
-
-
+original = dataset.data
+calculate = np.zeros((movies, users))
+for x in range(0, movies):
+    for y in range(0, users):
+        if original[x][y] > 0:
+            calculate[x][y] = predict(dataset.data, x, y)
