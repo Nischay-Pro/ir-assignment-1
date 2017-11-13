@@ -2,31 +2,22 @@ import pprint, math, sys
 import json
 import pymysql.cursors
 
-t = .85 #teleportation factor
+t = .85
 
 def calculatePagerank(allpages, inlinks, outlinks, count):
 
-    #find all pages with no outlinks
     nooutlinks = []
     for page in allpages:
-        #if outlinks[page] == 0:
         if page not in outlinks:
             nooutlinks.append(page)
-
-    #initial pagerank is evenly split
     pagerank = {}
     for key in allpages:
         pagerank[key] = 1.0/count
 
     prevPerplexity = 0
-    currentPerplexity = perplex(pagerank)
+    currentPerplexity = Perplex(pagerank)
 
-
-    #main loop
-    while not hasconverged(prevPerplexity, currentPerplexity):
-        #pprint.pprint(currentPerplexity)
-
-        ####pagerank
+    while not CheckConverged(prevPerplexity, currentPerplexity):
 
         newpagerank = {}
         sinkPR = 0
@@ -41,20 +32,19 @@ def calculatePagerank(allpages, inlinks, outlinks, count):
             for inlink in inlinks[key]:
                 if(inlink.isdigit()):
                     newpagerank[key] += t * (pagerank[int(inlink)] / len(outlinks[int(inlink)]))
-        ###
 
         pagerank = newpagerank
         prevPerplexity = currentPerplexity
-        currentPerplexity = perplex(pagerank)
+        currentPerplexity = Perplex(pagerank)
 
     return pagerank
 
-def hasconverged(prevPerplexity, currentPerplexity):
+def CheckConverged(prevPerplexity, currentPerplexity):
     r1 = round(prevPerplexity, 4)
     r2 = round(currentPerplexity, 4)
     return r1 == r2
 
-def perplex(pagerank):
+def Perplex(pagerank):
     return pow(2, shannonEntropy(pagerank))
 
 def shannonEntropy(pagerank):
@@ -64,45 +54,10 @@ def shannonEntropy(pagerank):
         s += p * math.log(p, 2)
     return -1 * s
 
-def readFile():
-    count = 0 #total num pages in collection
-    inlinks = {} #dict of pages to a list of all inlinks
-    outlinks = {} #dict of pages to count of outlinks
-    allpages = [] #list of all pages seen
-    f = open(sys.argv[1], 'r')
-    content = f.readlines()
-
-    for line in content:
-        line = line.strip() #remove newlines
-        links = line.split(" ")
-
-        node = links[0]
-
-        links.remove(node)
-
-        inlinks[node] = links
-        allpages.append(node)
-
-        for link in links:
-            if link in outlinks:
-                outlinks[link] += 1
-            else:
-                outlinks[link] = 1
-
-        count += 1
-
-    return allpages, inlinks, outlinks, count
-
-
-def getTopXbyPagerank(x, pageranks):
+def getTop(x, pageranks):
     s = [(k, pageranks[k]) for k in sorted(pageranks, key=pageranks.get, reverse=True)]
     for k, v in s[:x]:
         print(k, v)
-def sumPagerank(pagerank):
-    s = 0
-    for key in list(pagerank.keys()):
-        s += pagerank[key]
-    return s
 
 def main():
     with open('./../config.json', 'r') as f:
@@ -151,7 +106,7 @@ def main():
             cursor.execute(sql, )
     connection.commit()
     print("Top 10")
-    getTopXbyPagerank(10, pagerank)
+    getTop(10, pagerank)
     
 if __name__ == "__main__":
     main()

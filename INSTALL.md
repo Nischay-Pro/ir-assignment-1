@@ -10,13 +10,20 @@
 - json
 - pymysql
 - newspaper
+- matplotlib
+- numpy
+- networkx
+- scipy
+- sklearn
+- timeit
 
 Install using pip3 by entering the following command
 
     > pip3 install nltk
     > pip3 install json
     > pip3 install pymysql
-    > pip3 install newspaper
+    > pip3 install newspaper3k
+
 
 ## Configuring your Quick Cache Database
 
@@ -39,6 +46,9 @@ The project directory contains a folder called  ***schema***
                     --> text    (TEXT)
                     --> title   (TEXT)
                     --> indexed (TINYINT)
+                    --> backlinks (TEXT)
+                    --> inlinks (TEXT)
+                    --> pagerank (TEXT)
 
 
 ### Configuring config.json
@@ -105,7 +115,7 @@ Save and run the parser.
 
 ## Generating the invertedindex.py
 
-Run invertedindex.py to automatically generate inverted index for the articles extracted. 
+Run invertedindex.py to automatically generate the inverted index for the articles extracted. 
 Files already indexed will not be indexed again.
 
 ## Running a query
